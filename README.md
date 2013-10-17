@@ -14,3 +14,6 @@ animation.
 
 You can run the module as a standalone to have a demonstration of its
 usage.
+
+Voen made a video of the demo (thanks!) you can watch it
+[here](http://youtu.be/fUWADtenU9o).
