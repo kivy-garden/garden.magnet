@@ -1,23 +1,55 @@
+'''
+Magnet
+======
+
+Magnet is a Container widget that allows you to automatically Animate
+its chirdren to fit to the values of its properties. It makes, for
+example, animating the transition of your widget to a new position, very
+transparent.
+
+BoxLayout:
+    Magnet:
+        transitions: {'pos': 'out_quad', 'size': 'out_elastic'}
+        duration: 1
+        Label:
+            text: 'test'
+    Magnet:
+        transitions: {'x: 'out_quad', 'y': 'linear', 'size': 'out_elastic'}
+        duration: 2
+        Label:
+            text: 'test'
+    Magnet:
+        transitions: {'pos': 'linear', 'width': 'out_sin', 'height': 'in_sine'}
+        duration: 3
+        Label:
+            text: 'test'
+
+
+If new elements are added to this BoxLayout, or if the size/pos of this
+BoxLayout changes, the widgets will move to their new positions and
+size, using the defined transitions for each property.
+
+You can use Magnet for other properties, as you see fit, of course.
+'''
+
 from kivy.animation import Animation
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.app import App
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
+from kivy.properties import NumericProperty, ListProperty, DictProperty
 from kivy.lang import Builder
 from kivy.clock import Clock
 from random import sample, randint, random
 
-kv = '''
-<Magnet>:
-    on_pos: self.attract()
-    on_size: self.attract()
-'''
-
 
 class Magnet(Widget):
-    transition = StringProperty('out_quad')
+    transitions = DictProperty({'pos': 'out_quad', 'size': 'linear'})
     duration = NumericProperty(1)
-    anim = ObjectProperty(None, allownone=True)
+    anims = ListProperty([])
+
+    def __init__(self, **kwargs):
+        super(Magnet, self).__init__(**kwargs)
+        self.bind(**{k: self.attract for k in self.transitions})
 
     def on_children(self, *args):
         if len(self.children) > 1:
@@ -26,17 +58,18 @@ class Magnet(Widget):
             self.attract()
 
     def attract(self, *args):
-        if self.anim:
-            self.anim.stop(self.children[0])
-            self.anim = None
+        if self.anims:
+            for a in self.anims:
+                a.stop(self.children[0])
+            self.anims = []
 
-        self.anim = Animation(pos=self.pos, size=self.size,
-                              t=self.transition, d=self.duration)
+        for t in self.transitions:
+            a = Animation(t=self.transitions[t], d=self.duration,
+                          **{t: getattr(self, t), })
 
-        self.anim.start(self.children[0])
+            a.start(self.children[0])
+            self.anims.append(a)
 
-
-Builder.load_string(kv)
 
 # after that it's for the demo
 kvdemo = '''
@@ -63,7 +96,8 @@ class MagnetDemo(App):
         return self.root
 
     def add_child(self, dt, *args):
-        magnet = Magnet(transition=sample(transitions, 1)[0],
+        magnet = Magnet(transitions={'pos': sample(transitions, 1)[0],
+                                     'size': sample(transitions, 1)[0]},
                         duration=random())
         magnet.add_widget(Button(text='test %s' % dt))
         self.root.add_widget(magnet, index=randint(0, len(self.root.children)))
@@ -77,4 +111,4 @@ class MagnetDemo(App):
             self.root.add_widget(i)
 
 if __name__ == '__main__':
-   MagnetDemo().run() 
+    MagnetDemo().run()
