@@ -58,6 +58,9 @@ class Magnet(Widget):
             self.attract()
 
     def attract(self, *args):
+        if not self.children:
+            return
+
         if self.anims:
             for a in self.anims:
                 a.stop(self.children[0])
