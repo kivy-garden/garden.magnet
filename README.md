@@ -16,5 +16,4 @@ customized, as well as the duration of the animations.
 You can run the module as a standalone to have a demonstration of its
 usage.
 
-Voen made a video of the demo (thanks!) you can watch it
-[here](http://youtu.be/fUWADtenU9o).
+Check out the [demo video](http://youtu.be/fUWADtenU9o).
