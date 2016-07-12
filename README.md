@@ -2,8 +2,8 @@ Magnet
 ======
 
 Magnet is a simple container widget, its particularity is to Animate its
-children to the current values of its properties, using, each time
-they change.
+children to the current values of its properties, using `kivy.animation.Animation`,
+each time they change.
 
 It can be used to make changes in your interfaces more fun or easy to
 understand, easily, by automating Animation of the transformations (if
