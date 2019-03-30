@@ -1,1 +1,1 @@
-from magnet import Magnet
+from .magnet import Magnet
