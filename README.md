@@ -16,4 +16,6 @@ customized, as well as the duration of the animations.
 You can run the module as a standalone to have a demonstration of its
 usage.
 
+![Magnet screenshot](screenshot.png)
+
 Check out the [demo video](http://youtu.be/fUWADtenU9o).
